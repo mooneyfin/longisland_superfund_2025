@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# R
+.Rhistory
+.RData
+.Rapp.history
+.Rproj.user/
+*.Rproj
+
+# Basemap / tile caches
+rosm.cache/
+
+# Published article — © Elsevier, all rights reserved; see DOI in README.
+# Remove this line only if you have the right to redistribute it (e.g. a private repo
+# or an open-access / accepted-manuscript version).
+Mooney et al. 2025.pdf
