@@ -21,11 +21,13 @@ federal) sites, with several disparities specific to Suffolk County. See the pap
 
 ## Data sources
 
-- **U.S. EPA EJScreen** — tract-level demographic indicators, population denominators, and environmental burden indicators.
-- **U.S. EPA National Priorities List (NPL)** — federal Superfund site locations/boundaries.
-- **NY State DEC Environmental Remediation Database** ("remediation site borders") — State Superfund, Brownfield Cleanup, Voluntary Cleanup, Environmental Restoration, RCRA, and Petroleum Remediation site boundaries.
+*Access dates indicate when each dataset was downloaded for this analysis.*
+
+- **U.S. EPA EJScreen** — tract-level demographic indicators, population denominators, and environmental burden indicators (national geodatabase **accessed 2024-07-16**; Long Island extract prepared 2024-07-31).
+- **U.S. EPA National Priorities List (NPL)** — federal Superfund site locations/boundaries (NPL boundaries **accessed 2024-07-16**; federal Superfund sites **accessed 2024-08-21**).
+- **NY State DEC Environmental Remediation Database** ("remediation site borders") — State Superfund, Brownfield Cleanup, Voluntary Cleanup, Environmental Restoration, RCRA, and Petroleum Remediation site boundaries (**accessed 2024-07-16**; state Superfund sites **accessed 2024-08-21**).
 - **Area Deprivation Index** (Neighborhood Atlas, University of Wisconsin) — national percentile and state decile.
-- **U.S. Census Bureau** — tract geographies and ACS population denominators.
+- **U.S. Census Bureau** — TIGER/Line 2020 tract geographies (**accessed 2024-07-19**) and ACS population denominators.
 
 > The Long Island extracts used by the analysis are included under `01_data/`. The full national
 > source files (EJScreen national geodatabase, NPL boundary geodatabase, NYS civil-boundary
