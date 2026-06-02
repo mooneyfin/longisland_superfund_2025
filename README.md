@@ -27,23 +27,45 @@ federal) sites, with several disparities specific to Suffolk County. See the pap
 - **Area Deprivation Index** (Neighborhood Atlas, University of Wisconsin) — national percentile and state decile.
 - **U.S. Census Bureau** — tract geographies and ACS population denominators.
 
+> The Long Island extracts used by the analysis are included under `01_data/`. The full national
+> source files (EJScreen national geodatabase, NPL boundary geodatabase, NYS civil-boundary
+> geodatabase, and TIGER/Line tracts) are **not redistributed here** — download them from the
+> providers above.
+
 ## Repository contents
 
 ```
 longisland_superfund_2025/
-├── LI_Tracts_Final/           # Primary analytic dataset — 665 census tracts (Nassau + Suffolk), polygons (shapefile)
-├── Remediation_site_borders/  # NY State DEC remediation / Superfund site boundaries (shapefile)
-├── LI_Superfund.R             # R script to load the tract dataset (sf)
+├── 01_data/
+│   ├── li_tracts/                 # Primary analytic layer — 665 census tracts (Nassau + Suffolk)
+│   ├── ejscreen_li/               # EJScreen Long Island extract (shapefile + CSV)
+│   ├── federal_superfund/         # Federal (NPL) Superfund sites
+│   ├── state_superfund/           # NY State Superfund sites
+│   ├── remediation_site_borders/  # NY State DEC remediation site boundaries
+│   └── tract_boundary/            # Long Island tract boundary
+├── 02_code/
+│   ├── LI_Superfund.R             # Clean the tract layer → readable names → GeoPackage
+│   ├── More_Maps.Rmd              # Superfund maps
+│   ├── Lplot.R                    # Ripley's K/L spatial-clustering plots
+│   └── Tables.R                   # Summary tables
+├── 03_output/
+│   ├── LI_Superfund.gpkg          # Cleaned tract layer (readable column names)
+│   ├── More_Maps.html             # Rendered maps (+ More_Maps_files/)
+│   └── figures/                   # Exported figures (e.g. LPlot_Federal.png)
+├── longisland_superfund_2025.Rproj
 └── README.md
 ```
 
-> The published article (`Mooney et al. 2025.pdf`) is **not redistributed here** — see [The published article](#the-published-article).
+> **Kept local, not in the repository:** the published article PDF (© Elsevier — see
+> [The published article](#the-published-article)), manuscript drafts, and the bulky/national
+> source datasets noted under [Data sources](#data-sources).
 
 ## Data dictionary
 
-Primary file: `LI_Tracts_Final/LI_Tracts_Final.shp`, a polygon layer of **665 Census tracts**
-(Long Island — Nassau and Suffolk Counties, NY). Shapefile field names are truncated to 10
-characters; readable equivalents are listed below.
+Primary file: `01_data/li_tracts/li_tracts.shp` (cleaned copy: `03_output/LI_Superfund.gpkg`), a
+polygon layer of **665 Census tracts** (Long Island — Nassau and Suffolk Counties, NY). Field names
+in the source shapefile are truncated to 10 characters; the readable equivalents below are what
+`02_code/LI_Superfund.R` writes to the GeoPackage.
 
 ### Identifiers
 | Variable | Source field | Description |
@@ -135,6 +157,15 @@ within-tract count, a mean distance, and a distance to the nearest site boundary
 ## Coordinate reference system
 
 NAD83(2011) / New York Long Island State Plane (meters).
+
+## Reproducing
+
+Open `longisland_superfund_2025.Rproj` in RStudio (this anchors all `here()` paths), then run
+`02_code/LI_Superfund.R` to regenerate `03_output/LI_Superfund.gpkg` from
+`01_data/li_tracts/li_tracts.shp`.
+
+> The mapping/analysis scripts (`More_Maps.Rmd`, `Lplot.R`, `Tables.R`) still contain absolute
+> local paths from the original analysis; repoint their inputs to `01_data/` before running them.
 
 ## The published article
 

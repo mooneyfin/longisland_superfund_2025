@@ -1,16 +1,31 @@
-# macOS
+# ── OS / editor ───────────────────────────────────────────────
 .DS_Store
 
-# R
+# ── R ─────────────────────────────────────────────────────────
 .Rhistory
 .RData
 .Rapp.history
 .Rproj.user/
-
-# Basemap / tile caches
 rosm.cache/
 
-# Published article — © Elsevier, all rights reserved; see DOI in README.
-# Remove this line only if you have the right to redistribute it (e.g. a private repo
-# or an open-access / accepted-manuscript version).
-Mooney et al. 2025.pdf
+# knitr / rmarkdown intermediates (the .Rmd source and rendered .html are kept)
+*.knit.md
+*.utf8.md
+*.tex
+
+# ── ArcGIS lock + spatial-index sidecars (regenerable) ────────
+*.lock
+*.sbn
+*.sbx
+*.pitemx
+
+# ── Manuscripts, article, and other local-only material ───────
+manuscript/
+*.docx
+*.pdf
+
+# ── Large / national source data (kept local; see README "Data sources") ──
+Data/
+01_data/npl_boundaries/
+01_data/nys_civil_boundaries.gdb/
+01_data/census_tracts_2020/

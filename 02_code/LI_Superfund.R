@@ -8,7 +8,7 @@ library(sf)
 library(here)
 
 # 1. Load the primary tract shapefile (path is project-relative via here())
-superfund <- st_read(here("LI_Tracts_Final", "LI_Tracts_Final.shp"))
+superfund <- st_read(here("01_data", "li_tracts", "li_tracts.shp"))
 
 # 2. Map truncated shapefile field names -> readable names
 rename_map <- c(
@@ -53,6 +53,6 @@ rename_map <- c(
 superfund <- rename(superfund, any_of(rename_map))
 
 # 3. Export the cleaned layer as a GeoPackage
-out <- here("LI_Superfund.gpkg")
+out <- here("03_output", "LI_Superfund.gpkg")
 st_write(superfund, out, layer = "li_superfund", delete_dsn = TRUE)
 cat("Wrote", out, "-", nrow(superfund), "features,", ncol(superfund) - 1, "attributes\n")

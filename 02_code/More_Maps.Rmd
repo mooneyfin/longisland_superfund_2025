@@ -1,0 +1,328 @@
+---
+title: "Superfund Maps"
+author: "Fintan Mooney"
+date: "2024-12-05"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(classInt) # For classification intervals
+library(gridExtra)
+
+
+```
+
+
+```{r,load, echo = FALSE}
+# Define the file path to your shapefile
+shapefile_path <- "C:/Users/moone/OneDrive - Columbia University Irving Medical Center/MiscResearch/Superfund/Data/EJScreen_SF_LI_Shapefile/EJScreen_SF_LI_Shapefile.shp"
+
+# Load the shapefile into R as an sf object
+data <- st_read(shapefile_path)
+
+# Display the first few rows to understand the structure
+print(head(data))
+
+colnames(data)
+```
+
+## Subset columns
+
+You can also embed plots, for example:
+
+```{r dem, echo=FALSE}
+
+# Subset the columns
+dem <- data %>%
+  select(White_PCT, Black_PCT, HISPLA_PCT, Asian_PCT, LOWINCPCT, LINGISOPCT, LESSHSPCT)
+
+# Rename columns with spaces
+dem <- dem %>%
+  rename(
+    `White Percent` = White_PCT,
+    `Black Percent` = Black_PCT,
+    `Hispanic Percent` = HISPLA_PCT,
+    `Asian Percent` = Asian_PCT,
+    `Low Income Percent` = LOWINCPCT,
+    `Limited English Percent` = LINGISOPCT,
+    `Less than High School Percent` = LESSHSPCT
+  )
+
+# View the renamed dataframe
+print(head(dem))
+```
+```{r, counties, echo = FALSE}
+
+# Dissolve the census tract data by COUNTYFP to create county boundaries
+counties <- data %>%
+  group_by(COUNTYFP) %>%          # Group by the COUNTYFP column
+  summarize(geometry = st_union(geometry)) %>%  # Dissolve geometries within each county
+  ungroup()                   
+
+# Optional: Filter for Nassau (COUNTYFP = '059') and Suffolk (COUNTYFP = '103')
+counties <- counties %>%
+  filter(COUNTYFP %in% c("059", "103"))
+
+# View the counties object
+print(counties)
+```
+
+
+```{r, create maps, echo=FALSE}
+# List of variables to map
+variables <- c(
+  "White Percent",
+  "Black Percent",
+  "Hispanic Percent",
+  "Asian Percent",
+  "Low Income Percent",
+  "Limited English Percent",
+  "Less than High School Percent"
+)
+
+# Create maps for each variable using ggplot
+plots <- lapply(variables, function(var) {
+  
+  # Scale column values by 100
+  dem <- dem %>%
+    mutate(!!sym(var) := !!sym(var) * 100)
+  
+  # Create equal interval classification and generate custom labels
+  breaks <- classIntervals(pull(dem, !!sym(var)), n = 5, style = "equal")$brks
+  labels <- paste0("≤ ", round(breaks[-1], 1), "%")  # Add a percent sign to the labels
+  
+  dem <- dem %>%
+    mutate(class = cut(!!sym(var), 
+                       breaks = breaks, 
+                       include.lowest = TRUE,
+                       labels = labels))  # Assign percent labels
+  
+  # Plot the map with a discrete color palette
+  ggplot() +
+    geom_sf(data = dem, aes(fill = class), lwd = 0.1) +  # Remove tract borders
+    geom_sf(data = counties, fill = NA, color = "red", lwd = 0.5) +  # Add county borders
+    scale_fill_brewer(
+      palette = "YlGnBu", 
+      labels = labels,   # Use custom percent labels
+      guide = guide_legend(
+        title = "Equal Interval Breaks",     # Add legend title
+        title.position = "top",              # Place title above the legend symbols
+        title.hjust = 0.5,                   # Center the title
+        title.theme = element_text(size = 8), # Style the legend title (not bolded)
+        label.position = "bottom",           # Place labels below symbols
+        nrow = 1                             # Make the legend single-row
+      )
+    ) +
+    labs(
+      title = paste(var, "in Long Island Census Tracts (2023)")
+    ) +
+    theme_void() +  # Remove background and coordinates
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 9, face = "bold", margin = margin(b = 5)), # Move title down
+      legend.position = "top",              # Place legend on top
+      legend.direction = "horizontal",      # Horizontal layout
+      legend.text = element_text(size = 8),
+      legend.key.width = unit(2, "cm"),     # Adjust legend width
+      legend.key.height = unit(0.5, "cm"),  # Adjust legend height
+      legend.margin = margin(t = 10, r = 0, b = 0, l = 0, unit = "pt"), # Add space between legend and title
+      plot.margin = margin(t = 20, r = 10, b = 10, l = 10, unit = "pt") # Add space above and around the plot
+    )
+})
+
+# Print each plot separately
+for (plot in plots) {
+  print(plot)
+}
+
+```
+
+```{r, env df, echo = FALSE}
+# Subset the columns
+env <- data %>%
+  select(PRE1960PCT, PM25,OZONE, RSEI_AIR, PTRAF,UST)
+
+# Rename columns with spaces
+env <- env %>%
+  rename(
+    `Lead Indicator` = PRE1960PCT,
+    `Annual Average PM2.5 Concentrations (ug/m3)` = PM25,
+    `Average Highest Ozone Levels (ppm)` = OZONE,
+    `Toxic Releases to Air (RESI Score)` = RSEI_AIR,
+    `Traffic Proximity and Volume` = PTRAF,
+    `Proximity to Underground Storage Tanks` = UST
+  )
+
+# View the renamed dataframe
+print(head(dem))
+
+
+```
+
+```{r, lead, echo=FALSE}
+# List of variables to map
+variables <- c(
+  "Lead Indicator"
+)
+
+# Create maps for each variable using ggplot
+plots <- lapply(variables, function(var) {
+  
+  # Scale column values by 100
+  env <- env %>%
+    mutate(!!sym(var) := !!sym(var) * 100)
+  
+  # Create equal interval classification and generate custom labels
+  breaks <- classIntervals(pull(env, !!sym(var)), n = 5, style = "equal")$brks
+  labels <- paste0("≤ ", round(breaks[-1], 1), "%")  # Add a percent sign to the labels
+  
+  env <- env %>%
+    mutate(class = cut(!!sym(var), 
+                       breaks = breaks, 
+                       include.lowest = TRUE,
+                       labels = labels))  # Assign percent labels
+  
+  # Plot the map with a discrete color palette
+  ggplot() +
+    geom_sf(data = env, aes(fill = class), lwd = 0.1) +  # Remove tract borders
+    geom_sf(data = counties, fill = NA, color = "red", lwd = 0.5) +  # Add county borders
+    scale_fill_brewer(
+      palette = "YlGnBu", 
+      labels = labels,   # Use custom percent labels
+      name = "Percent of Housing Units Built Pre-1960 (Equal Interval Breaks)",  # Legend title
+      guide = guide_legend(
+        title.position = "top",     # Place title above the legend symbols
+        title.hjust = 0.5,          # Center the title
+        title.theme = element_text(size = 8), # Style the legend title
+        label.position = "bottom",  # Place labels below symbols
+        nrow = 1                    # Make the legend single-row
+      )
+    ) +
+    labs(
+      title = paste(var, "for Long Island Census Tracts (2023)")
+    ) +
+    theme_void() +  # Remove background and coordinates
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 9, face = "bold", margin = margin(b = 10)), # Move title down
+      legend.position = "top",              # Place legend on top
+      legend.direction = "horizontal",      # Horizontal layout
+      legend.text = element_text(size = 8),
+      legend.key.width = unit(2, "cm"),     # Adjust legend width
+      legend.key.height = unit(0.5, "cm"),  # Adjust legend height
+      legend.margin = margin(t = 10, r = 0, b = 0, l = 0, unit = "pt"), # Add space between legend and title
+      plot.margin = margin(t = 20, r = 10, b = 10, l = 10, unit = "pt") # Add space above and around the plot
+    )
+})
+
+# Print each plot separately
+for (plot in plots) {
+  print(plot)
+}
+
+```
+
+```{r, env maps, echo=FALSE}
+
+# List of variables to map
+variables <- c(
+  "Annual Average PM2.5 Concentrations (ug/m3)",
+  "Average Highest Ozone Levels (ppm)",
+  "Toxic Releases to Air (RESI Score)",
+  "Traffic Proximity and Volume",
+  "Proximity to Underground Storage Tanks"
+)
+
+# Create maps for each variable using ggplot
+plots <- lapply(variables, function(var) {
+  
+  # Filter out NA values (if any) for robustness
+  env_var <- env %>%
+    filter(!is.na(!!sym(var)))
+  
+  # Pull the data for the variable
+  var_data <- pull(env_var, !!sym(var))
+  
+  # Use quantile classification and ensure unique breaks
+  breaks <- classIntervals(var_data, n = 5, style = "quantile")$brks
+  
+  # Adjust breaks to fully encompass the data range
+  breaks[1] <- min(var_data) - 0.001  # Ensure lowest value is included
+  breaks[length(breaks)] <- max(var_data) + 0.001  # Ensure highest value is included
+  
+  # Avoid duplicate breaks by ensuring unique and sorted values
+  breaks <- sort(unique(round(breaks, digits = 6)))  # Adjust precision to avoid floating-point issues
+  
+  # Customize labels: round only Traffic Proximity and Volume, keep others as decimals
+  if (var == "Traffic Proximity and Volume") {
+    labels <- paste0("≤ ", round(breaks[-1], 0))  # Round Traffic to integers
+  } else {
+    labels <- paste0("≤ ", round(breaks[-1], 1))  # Keep one decimal for other variables
+  }
+  
+  # Create classification using the corrected breaks
+  env_var <- env_var %>%
+    mutate(class = cut(!!sym(var), 
+                       breaks = breaks, 
+                       include.lowest = TRUE,  # Include lowest values
+                       right = TRUE,           # Include upper bounds
+                       labels = labels))
+  
+  # Check for any remaining NA in 'class' after cut()
+  if (any(is.na(env_var$class))) {
+    warning(paste("Warning: NA values found in 'class' for variable", var))
+    print(env_var %>% filter(is.na(class)))  # Print problematic rows
+    stop("Check breaks or data values to ensure alignment.")
+  }
+  
+  # Plot the map with a discrete color palette
+  ggplot() +
+    geom_sf(data = env_var, aes(fill = class), lwd = 0.1) +  # Thin tract borders
+    geom_sf(data = counties, fill = NA, color = "red", lwd = 0.5) +  # Add county borders
+    scale_fill_brewer(
+      palette = "YlGnBu", 
+      labels = labels,   # Use custom labels
+      guide = guide_legend(
+        title = "Quantile Breaks",           # Add legend title
+        title.position = "top",              # Place title above the legend
+        title.hjust = 0.5,                   # Center the legend title
+        title.theme = element_text(size = 8), # Style the legend title
+        label.position = "bottom",           # Place labels below symbols
+        nrow = 1                             # Single-row layout
+      )
+    ) +
+    labs(
+      title = paste(var, "in Long Island Census Tracts (2023)")
+    ) +
+    theme_void() +  # Remove background and coordinates
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 9, face = "bold", margin = margin(b = 5)), # Move title down
+      legend.position = "top",              # Place legend on top
+      legend.direction = "horizontal",      # Horizontal layout
+      legend.text = element_text(size = 8),
+      legend.key.width = unit(2, "cm"),     # Adjust legend width
+      legend.key.height = unit(0.5, "cm"),  # Adjust legend height
+      legend.margin = margin(t = 10, r = 0, b = 0, l = 0, unit = "pt"), # Add space between legend and title
+      plot.margin = margin(t = 20, r = 10, b = 10, l = 10, unit = "pt") # Add space above and around the plot
+    )
+})
+
+# Print each plot separately
+for (plot in plots) {
+  print(plot)
+}
+
+
+```
+
+
+
+
+
