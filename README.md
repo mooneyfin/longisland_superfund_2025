@@ -7,12 +7,16 @@ Data and cleaning code for Mooney et al. (2025), *Health & Place*.
 
 ## Overview
 
-This repository holds the tract-level data and cleaning code behind a distributive-justice
-analysis of communities near Superfund sites on Long Island, New York (Nassau and Suffolk
-Counties). The study links socio-demographic and environmental characteristics of **665 census
-tracts** to the number of **federal (NPL)** and **New York State** Superfund sites per tract using
+This repository holds the tract-level data and cleaning code for 
+
+> Mooney, F. A., Kelly, J. R., Warren, J. L., & Deziel, N. C. (2025). Demographic inequities and
+> cumulative environmental burdens within communities near superfund sites on Long Island, New York.
+> *Health & Place, 91,* 103409. https://doi.org/10.1016/j.healthplace.2024.103409
+
+The study links socio-demographic and environmental characteristics of **665 census
+tracts** to the number of **Federal (NPL)** and **New York State** Superfund sites per tract using
 hierarchical Bayesian spatial Poisson regression, with analyses stratified by county and by site
-type (federal vs. state).
+type (Federal vs. state).
 
 In brief, tracts with higher proportions of low-income and Hispanic/Latino residents, higher
 PM2.5, higher toxic air releases, and closer proximity to underground gas storage tanks tended to
@@ -58,16 +62,9 @@ longisland_superfund_2025/
 └── README.md
 ```
 
-> **Kept local, not in the repository:** the published article PDF (© Elsevier — see
-> [The published article](#the-published-article)), manuscript drafts, and the bulky/national
-> source datasets noted under [Data sources](#data-sources).
-
 ## Data dictionary
 
-Primary file: `01_data/li_tracts/li_tracts.shp` (cleaned copy: `03_output/LI_Superfund.gpkg`), a
-polygon layer of **665 Census tracts** (Long Island — Nassau and Suffolk Counties, NY). Field names
-in the source shapefile are truncated to 10 characters; the readable equivalents below are what
-`02_code/LI_Superfund.R` writes to the GeoPackage.
+Primar
 
 ### Identifiers
 | Variable | Source field | Description |
