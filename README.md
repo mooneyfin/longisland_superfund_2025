@@ -36,7 +36,7 @@ federal) sites, with several disparities specific to Suffolk County. See the pap
 > The Long Island extracts used by the analysis are included under `01_data/`. The full
 > files (EJScreen national geodatabase, NPL boundary geodatabase, NY State Superfunds) are not in this repository; they can be downloaded from here:
 - **EJScreen**: [
-](https://experience.arcgis.com/experience/e7cd788e274c45eeb313a94da849e7fe)
+EJScreen](https://experience.arcgis.com/experience/e7cd788e274c45eeb313a94da849e7fe)
 - **EPA National Piority List Superfund Sites**: (https://www.arcgis.com/home/item.html?id=d6e1591d9a424f1fa6d95a02095a06d7)
 - **NY State DEC Environmental Remediation Database**: (https://nam02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdec.ny.gov%2Fenvironmental-protection%2Fsite-cleanup%2Fdatabase-search%2Fremediation-site-boundaries-downloadable-gis-files&data=05%7C02%7Cfm2873%40cumc.columbia.edu%7Cd0c925a948d34feeb49e08dec0c331e4%7Cb0002a9b0017404d97dc3d3bab09be81%7C0%7C0%7C639160142817064583%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=BJrc4GPoH5LlVoGRZQX3RKScqOqLoRGa4l6sBusKJaE%3D&reserved=0)
   
