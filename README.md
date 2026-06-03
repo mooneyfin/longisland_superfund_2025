@@ -2,7 +2,7 @@
 
 Data and cleaning code for Mooney et al. (2025), *Health & Place*.
 
-**Maintainer:** Fintan A. Mooney ([@mooneyfin](https://github.com/mooneyfin))
+**Author:** Fintan A. Mooney ([@mooneyfin](https://github.com/mooneyfin))
 **Last updated:** 2026-06-02
 
 ## Overview
@@ -27,16 +27,19 @@ federal) sites, with several disparities specific to Suffolk County. See the pap
 
 *Access dates indicate when each dataset was downloaded for this analysis.*
 
-- **U.S. EPA EJScreen** — tract-level demographic indicators, population denominators, and environmental burden indicators (national geodatabase **accessed 2024-07-16**; Long Island extract prepared 2024-07-31).
+- **U.S. EPA EJScreen** — tract-level demographic indicators, population denominators, and environmental burden indicators (national geodatabase **accessed 2024-07-16**).
 - **U.S. EPA National Priorities List (NPL)** — federal Superfund site locations/boundaries (NPL boundaries **accessed 2024-07-16**; federal Superfund sites **accessed 2024-08-21**).
-- **NY State DEC Environmental Remediation Database** ("remediation site borders") — State Superfund, Brownfield Cleanup, Voluntary Cleanup, Environmental Restoration, RCRA, and Petroleum Remediation site boundaries (**accessed 2024-07-16**; state Superfund sites **accessed 2024-08-21**).
+- **NY State DEC Environmental Remediation Database** ("remediation site borders") — State Superfund, Brownfield Cleanup, Voluntary Cleanup, Environmental Restoration, RCRA, and Petroleum Remediation site boundaries (**accessed 2024-07-16**).
 - **Area Deprivation Index** (Neighborhood Atlas, University of Wisconsin) — national percentile and state decile.
 - **U.S. Census Bureau** — TIGER/Line 2020 tract geographies (**accessed 2024-07-19**) and ACS population denominators.
 
-> The Long Island extracts used by the analysis are included under `01_data/`. The full national
-> source files (EJScreen national geodatabase, NPL boundary geodatabase, NYS civil-boundary
-> geodatabase, and TIGER/Line tracts) are **not redistributed here** — download them from the
-> providers above.
+> The Long Island extracts used by the analysis are included under `01_data/`. The full
+> files (EJScreen national geodatabase, NPL boundary geodatabase, NY State Superfunds) are not in this repository; they can be downloaded from here:
+- **EJScreen**: [
+](https://experience.arcgis.com/experience/e7cd788e274c45eeb313a94da849e7fe)
+- **EPA National Piority List Superfund Sites**: (https://www.arcgis.com/home/item.html?id=d6e1591d9a424f1fa6d95a02095a06d7)
+- **NY State DEC Environmental Remediation Database**: (https://nam02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdec.ny.gov%2Fenvironmental-protection%2Fsite-cleanup%2Fdatabase-search%2Fremediation-site-boundaries-downloadable-gis-files&data=05%7C02%7Cfm2873%40cumc.columbia.edu%7Cd0c925a948d34feeb49e08dec0c331e4%7Cb0002a9b0017404d97dc3d3bab09be81%7C0%7C0%7C639160142817064583%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=BJrc4GPoH5LlVoGRZQX3RKScqOqLoRGa4l6sBusKJaE%3D&reserved=0)
+  
 
 ## Repository contents
 
@@ -64,7 +67,7 @@ longisland_superfund_2025/
 
 ## Data dictionary
 
-Primar
+Primary spatial dataframe for modeling: 'LI_Superfund.gpkg'
 
 ### Identifiers
 | Variable | Source field | Description |
@@ -157,37 +160,14 @@ within-tract count, a mean distance, and a distance to the nearest site boundary
 
 NAD83(2011) / New York Long Island State Plane (meters).
 
-## Reproducing
-
-Open `longisland_superfund_2025.Rproj` in RStudio (this anchors all `here()` paths), then run
-`02_code/LI_Superfund.R` to regenerate `03_output/LI_Superfund.gpkg` from
-`01_data/li_tracts/li_tracts.shp`.
-
-> The mapping/analysis scripts (`More_Maps.Rmd`, `Lplot.R`, `Tables.R`) still contain absolute
-> local paths from the original analysis; repoint their inputs to `01_data/` before running them.
 
 ## The published article
-
-The article is **© 2025 Elsevier Ltd (all rights reserved)** and is not redistributed in this
-repository. Access the published version through the publisher:
-
-https://doi.org/10.1016/j.healthplace.2024.103409
-
-## How to cite
 
 > Mooney, F. A., Kelly, J. R., Warren, J. L., & Deziel, N. C. (2025). Demographic inequities and
 > cumulative environmental burdens within communities near superfund sites on Long Island, New York.
 > *Health & Place, 91,* 103409. https://doi.org/10.1016/j.healthplace.2024.103409
 
-Author affiliations: Yale School of Public Health — Department of Environmental Health Sciences
-(Mooney, Kelly, Deziel) and Department of Biostatistics (Warren), New Haven, CT, USA.
 
-## License
-
-- **Code:** _TODO — choose a license (e.g., MIT)._
-- **Data:** source datasets are publicly available under their respective providers' terms
-  (EJScreen and U.S. Census are U.S. public domain; NY State DEC and the ADI / Neighborhood Atlas
-  carry their own terms of use).
 
 ## Contact
 
