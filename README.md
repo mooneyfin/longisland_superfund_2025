@@ -171,5 +171,6 @@ NAD83(2011) / New York Long Island State Plane (meters).
 
 ## Contact
 
-Corresponding author: **Nicole C. Deziel**, Yale School of Public Health — Nicole.deziel@yale.edu
-Repository maintainer: **Fintan A. Mooney** ([@mooneyfin](https://github.com/mooneyfin))
+Corresponding authors: 
+- **Nicole C. Deziel**, Yale School of Public Health — Nicole.deziel@yale.edu
+- **Fintan A. Mooney**, Columbia Mailman School of Public Health - fm2873@cumc.columbia.edu ([@mooneyfin](https://github.com/mooneyfin))
